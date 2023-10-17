@@ -1,0 +1,53 @@
+﻿@page "/docs"
+@model DocsModel
+@{
+    ViewData["Title"] = "Guid Generator - Docs";
+}
+
+<div class="flex flex-col justify-center items-center pt-8">
+    <div class="prose">
+        <h2>Documentation</h2>
+        <div class="divide-y space-y-4">
+            <div>
+                <h3>Plain GUID, Please</h3>
+                Generate a plain response by passing the query parameter <span class="font-bold">accept</span> as <span class="font-bold">plain</span>
+                <pre>https://guid.new?accept=plain
+https://guid.new?accept=plain&count=5
+                </pre>
+                <span class="not-prose">
+                    <a class="text-sm font-semibold text-blue-700 hover:text-blue-600" href="/?accept=plain">See example</a>
+                </span>
+            </div>
+            <div>
+                <h3>Generate a specific number of GUIDs</h3>
+                <span>Generate a specific number of GUIDs by supplying a count from 1-100</span>
+                <pre>
+https://guid.new?count=5
+</pre>
+                <span class="not-prose">
+                    <a class="text-sm font-semibold text-blue-700 hover:text-blue-600" href="/?count=5">See example</a>
+                </span>
+            </div>
+            <div>
+                <h3>Using JSON</h3>
+                <div>
+                    Generate a JSON response by setting the <span class="font-bold">Accept</span> header to <span class="font-bold">
+                        application/json
+                    </span>
+                    <pre class="overflow-x-auto">
+<span><span>curl --request GET \</span></span>
+<span><span>  --url https://guid.new/ \</span></span>
+<span><span>  --header 'Accept: application/json'</span></span>
+<span></span>
+</pre>
+                </div>
+                <div>
+                    You can also simply set the query parameter <span class="font-bold">accept</span> as <span class="font-bold">json</span>
+                    <pre>https://guid.new?accept=json
+https://guid.new?accept=json&count=5
+                </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

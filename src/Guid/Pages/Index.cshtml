@@ -1,0 +1,108 @@
+﻿@page "{count?}"
+@model IndexModel
+@{
+    ViewData["Title"] = "Guid Generator";
+}
+
+<div class="text-center">
+    @if (Model.Count == null || Model.Count <= 1)
+    {
+        <div class="p-3">
+            <span id="guid" class="font-mono text-lg">@Guid.NewGuid().ToString()</span>
+            <span>
+                <button onclick="javascript:copy('guid', 'success')" type="button"
+                        class="rounded-md bg-white dark:bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 border shadow-sm ring-1 ring-blue-700 hover:bg-gray-200">
+                    Copy
+                </button>
+            </span>
+        </div>
+        <div class="p-3">
+            <button onclick="javascript:generate()" type="button"
+                    class="rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 ring-1 ring-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Generate
+            </button>
+        </div>
+        <div>
+            <span class="text-green-700 text-xs hidden" id="success">Copied!</span>
+        </div>
+    }
+    else if (Model.Count.Value > 100)
+    {
+        <div class="p-3">
+            Let's not get too wild! Stick to 100 or less, please.
+        </div>
+    }
+    else
+    {
+        for (var i = 1; i <= Model.Count; i++)
+        {
+            <div class="flex justify-center py-2">
+                <div class="flex justify-between gap-3 items-center">
+                    <span id="guid-@(i)" class="font-mono">@Guid.NewGuid().ToString()</span>
+                    <span>
+                        <button onclick="javascript:copy('guid-@(i)', 'success-@(i)')" type="button"
+                                class="rounded-md bg-white dark:bg-white px-2.5 py-1 text-sm font-semibold text-gray-900 border shadow-sm ring-1 ring-blue-700 hover:bg-gray-200">
+                            Copy
+                        </button>
+                    </span>
+                    <span class="text-green-700 text-xs hidden" id="success-@(i)">Copied!</span>
+                </div>
+            </div>
+        }
+        <div class="p-3">
+            <button onclick="javascript:generate()" type="button"
+                    class="rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 ring-1 ring-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Generate
+            </button>
+        </div>
+    }
+</div>
+
+<script>
+    let timers = [];
+    function copy(id, success) {
+        navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+            let timer = timers.find(p => p.id == id);
+            if (timer != null) {
+                console.log('clearing timer')
+                clearTimeout(timer.timer);
+            }
+
+            if (result.state === "granted" || result.state === "prompt") {
+                let e = document.getElementById(id);
+                navigator.clipboard.writeText(e.textContent)
+
+                let notice = document.getElementById(success);
+                notice.classList.remove("hidden")
+
+                let t = setTimeout(() => {
+                    notice.classList.add("hidden");
+                }, 2000);
+
+                timers.push({ id, timer: t });
+            }
+        }).catch(err => {
+            console.log('permission to clipboard unavailable, trying to copy it anyways');
+            copyToClipboard(id, success);
+        })
+    }
+
+    function copyToClipboard(id, success) {
+        let e = document.getElementById(id);
+        navigator.clipboard.writeText(e.textContent)
+
+        let notice = document.getElementById(success);
+        notice.classList.remove("hidden")
+
+        let t = setTimeout(() => {
+            notice.classList.add("hidden");
+        }, 2000);
+
+        timers.push({ id, timer: t });
+    }
+
+    function generate() {
+        location.reload()
+    }
+
+</script>
